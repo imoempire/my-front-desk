@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import { ButtonActionProps } from "@/constants/ComponentsProps";
+import { ButtonActionProps, CancelProps } from "@/constants/ComponentsProps";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   ActivityIndicator,
@@ -65,6 +65,33 @@ export const ActionButton = ({
   );
 };
 
+export const CancelButton = ({ onPress = () => {} }: CancelProps) => {
+  return (
+    <TouchableOpacity onPress={onPress} style={styles.container}>
+      <View>
+        <ThemedText
+          style={{
+            fontSize: 20,
+            fontFamily: "Regular",
+            lineHeight: 30,
+            color: Colors.whiteBackground,
+          }}
+        >
+          Cancel
+        </ThemedText>
+      </View>
+      <MaterialIcons
+        style={{
+          marginRight: 10,
+        }}
+        name="close"
+        size={24}
+        color={Colors.whiteText}
+      />
+    </TouchableOpacity>
+  );
+};
+
 export const BackButton = () => {
   const handleGoHome = () => {
     router.back();
@@ -102,5 +129,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
     paddingHorizontal: 10,
+    backgroundColor: "#AFAFAF",
   },
 });

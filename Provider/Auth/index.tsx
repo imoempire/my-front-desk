@@ -2,6 +2,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import { useStorageState } from "../SessionManager/useStorageState";
 import { setSession } from "../SessionManager/sessionManager";
+import authServices from "@/API/Services/auth.services";
 
 interface AuthContextType {
   signOut: () => void;
@@ -10,6 +11,7 @@ interface AuthContextType {
   isLoading: boolean;
   setSession: (value: string | null) => void;
   getSession: () => Promise<string | null>;
+  getAuthSession: () => Promise<string | null>;
 }
 
 const AuthContext = React.createContext<AuthContextType>({
@@ -19,6 +21,7 @@ const AuthContext = React.createContext<AuthContextType>({
   isLoading: false,
   setSession: () => {},
   getSession: () => Promise.resolve(null),
+  getAuthSession: () => Promise.resolve(null),
 });
 
 export function useSession() {
@@ -58,10 +61,14 @@ export function SessionProvider(props: React.PropsWithChildren) {
         session,
         isLoading,
         setSession: (value) => {
+          console.log(value);
+          
           setStorageSession(value);
           setSession(value);
+          // authServices.setToken(value);
         },
         getSession,
+        getAuthSession: authServices.getToken,
       }}
     >
       {props.children}

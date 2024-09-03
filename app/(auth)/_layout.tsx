@@ -1,6 +1,6 @@
 import { ThemedText } from "@/components/ThemedText";
 import { useSession } from "@/Provider/Auth";
-import { Redirect, Slot, Stack, Tabs } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import React from "react";
 
 export default function AuthLayout() {
@@ -9,6 +9,8 @@ export default function AuthLayout() {
   if (isLoading) {
     return <ThemedText>Loading...</ThemedText>;
   }
+
+  console.log(session);
 
   // Only require authentication within the (app) group's layout as users
   // need to be able to access the (auth) group and sign in again.

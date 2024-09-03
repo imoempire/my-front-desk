@@ -7,37 +7,86 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import { AppInput, ThemedPasswordInput } from "@/components/Inputs";
 import { LoginProps } from "@/constants/FormProps";
-import { SubmitHandler } from "react-hook-form";
-import TitleLabel from "@/components/Label";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { TitleLabel } from "@/components/Label";
 import { ActionButton } from "@/components/Buttons";
 import { router } from "expo-router";
 import { useSession } from "@/Provider/Auth";
+import authServices from "@/API/Services/auth.services";
+import useLoginMutation from "@/API/Services/Data/OrgUser/use-login.mutation";
 
 const Login = () => {
-  const { setSession } = useSession();
+  // *HOOK
+  const { setSession, session } = useSession();
+  const LOGIN = useLoginMutation();
+  // console.log(session);
 
-  const itemCount = 27;
-  const items = Array.from({ length: itemCount }, (_, index) => ({
-    id: (index + 1).toString(),
-    text: `Item ${index + 1}`,
-  }));
+  // FORMS
+  const { control, handleSubmit } = useForm<LoginProps>();
 
-  // const renderItem = ({ item }: { item: { id: string; text: string } }) => (
-  //   <View style={styles.itemContainer}>
-  //     <Text style={styles.itemText}>{item.text}</Text>
-  //   </View>
-  // );
+  const handleOrgSignIn: SubmitHandler<LoginProps> = (data) => {
+    let variables = {
+      email: data?.email.trim(),
+      password: data?.password.trim(),
+    };
+    LOGIN.mutate(
+      { variables },
+      {
+        onSuccess: (res) => {
+          let DATA = res?.data;
+          let result = DATA?.data;
+          let TOKENS = result?.tokens;
+          let accessToken = TOKENS?.access_token;
+          let refreshToken = TOKENS?.refresh_token;
+          authServices.setToken(accessToken);
+          authServices.refreshToken(refreshToken);
 
-  // const handleOrgSignIn: SubmitHandler<LoginProps> = (data) => {};
-  const handleOrgSignIn = () => {
-    setSession("John Doe");
-    router.push("/(app)");
+          const { tokens, ...userWithoutTokens } = result;
+
+          console.log(userWithoutTokens);
+
+          setSession(JSON.stringify(userWithoutTokens));
+          // router.push("/(app)");
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+      }
+    );
   };
+
+  const handleOrgSignIn2: SubmitHandler<LoginProps> = (data) => {
+    let userWithoutTokens = {
+      IsPhoneNumber: "0240450201",
+      email: "webprofesional16@gmail.com",
+      fullname: "Saviour Yao Dorvlo",
+      id: 53,
+      organizationId: "5977923d-2631-421b-afb2-ae598603e00f",
+      roleName: "Admin",
+      userId: "53b58376-b9ab-4001-a149-eda108e9b991",
+    };
+    setSession(JSON.stringify(userWithoutTokens));
+  };
+
+  useEffect(() => {
+    // Define an async function
+    const fetchToken = async () => {
+      try {
+        const token = await authServices.getToken();
+        // console.log(token, "tokens");
+      } catch (error) {
+        console.error("Error fetching token:", error);
+      }
+    };
+
+    // Call the async function
+    fetchToken();
+  }, []);
 
   return (
     <ThemedView>
@@ -61,10 +110,55 @@ const Login = () => {
             />
           </View>
           <View style={{ gap: 30, width: "70%" }}>
-            <AppInput onChange={() => {}} label="Email" />
-            <ThemedPasswordInput onChange={() => {}} label="Password" />
+            <Controller
+              name={"email"}
+              control={control}
+              rules={{
+                required: "Organization Email is required!",
+              }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => {
+                return (
+                  <AppInput
+                    label="Email"
+                    onChange={onChange}
+                    value={value}
+                    isError={!!error}
+                    error={error}
+                    capitalize="none"
+                  />
+                );
+              }}
+            />
+            <Controller
+              control={control}
+              name="password"
+              rules={{
+                required: "Password is required",
+              }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => {
+                return (
+                  <ThemedPasswordInput
+                    label="Password"
+                    onChange={onChange}
+                    value={value}
+                    isError={!!error}
+                    error={error}
+                  />
+                );
+              }}
+            />
             <View style={{ alignItems: "center" }}>
-              <ActionButton onPress={handleOrgSignIn} title="Continue" />
+              <ActionButton
+                onPress={handleSubmit(handleOrgSignIn)}
+                title="Continue"
+                load={LOGIN.isPending}
+              />
             </View>
           </View>
         </View>
@@ -104,28 +198,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-{
-  /* <KeyboardAvoidingView
-behavior={Platform.OS === "ios" ? "padding" : undefined}
-style={{ flex: 1 }}
->
-<View style={{ flex: 1 }}>
-  <FlatList
-    data={items}
-    renderItem={renderItem}
-    keyExtractor={(item) => item.id}
-  />
-</View>
-<View style={{ flex: 0.2, backgroundColor: "pink" }}>
-  <TextInput
-    style={{
-      borderWidth: 2,
-      borderColor: "red",
-      height: 40,
-    }}
-    placeholder="Testing"
-  />
-</View>
-</KeyboardAvoidingView> */
-}

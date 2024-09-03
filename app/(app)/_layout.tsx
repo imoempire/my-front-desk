@@ -14,6 +14,7 @@ export default function AppLayout() {
   if (!session) {
     return <Redirect href="/(auth)/login" />;
   }
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
@@ -23,6 +24,13 @@ export default function AppLayout() {
         name="modal"
         options={{
           presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        name="country"
+        options={{
+          presentation: "modal",
+          animation: "slide_from_right",
         }}
       />
     </Stack>

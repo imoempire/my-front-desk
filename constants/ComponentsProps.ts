@@ -1,3 +1,4 @@
+import { Href } from "expo-router";
 import { FieldError } from "react-hook-form";
 
 export interface AppInputProps {
@@ -24,6 +25,7 @@ export interface AppPhoneInputProps {
   width?: number | any;
   selected: string;
   label: string;
+  code?: any;
 }
 
 export interface ButtonActionProps {
@@ -35,10 +37,22 @@ export interface ButtonActionProps {
   load?: boolean;
 }
 
+export interface CancelProps {
+  onPress?: () => void;
+}
+
 export interface homecard {
   buttonColor?: string;
   title?: string;
   icon?: any;
   type?: "sign" | "out";
-  route?: string;
+  route?: Href;
+}
+
+export interface VisitCardProps {
+  buttonColor?: string;
+  title?: string;
+  icon?: any;
+  type?: "sign" | "out";
+  route?: Href;
 }

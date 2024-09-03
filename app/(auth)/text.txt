@@ -1,0 +1,8 @@
+ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5Nzc5MjNkLTI2MzEtNDIxYi1hZmIyLWFlNTk4NjAzZTAwZiIsInN1YiI6IjUzYjU4Mzc2LWI5YWItNDAwMS1hMTQ5LWVkYTEwOGU5Yjk5MSIsImVtYWlsIjoid2VicHJvZmVzaW9uYWwxNkBnbWFpbC5jb20iLCJzY29wZXMiOiJBZG1pbiIsInJvbGVOYW1lIjoiQWRtaW4iLCJpYXQiOjE3MjUzNjIyMTEsImV4cCI6MTcyNTk2NzAxMX0.3VZCZLUMh2_llL80lA2KSlQVWTDDlpz0_w_RiddbQ2I
+
+ {
+    "IsPhoneNumber": "0240450201", "email": "webprofesional16@gmail.com", 
+ "fullname": "Saviour Yao Dorvlo", "id": 53, 
+ "organizationId": "5977923d-2631-421b-afb2-ae598603e00f", 
+ "roleName": "Admin", "userId": "53b58376-b9ab-4001-a149-eda108e9b991"
+ }
